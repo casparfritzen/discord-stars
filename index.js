@@ -3,16 +3,24 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const moment = require("moment");
 
+const DISCORD_PREFIX = "?";
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
+
+console.log("ufffff");
+
 const { Pool } = require("pg");
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgresql://root:root@localhost:5432/bot',
   ssl: true,
   ssl: { rejectUnauthorized: false },
 });
 
+console.log("yeah its workinnnn");
+
 pool.query(
   `
+  DROP TABLE stars;
   CREATE TABLE IF NOT EXISTS stars ();
   ALTER TABLE stars ADD COLUMN IF NOT EXISTS id SERIAL PRIMARY KEY;
   ALTER TABLE stars ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT current_timestamp;
@@ -25,26 +33,26 @@ pool.query(
     client.on("ready", () => {
       client.user.setPresence({
         game: {
-          name: `${process.env.DISCORD_PREFIX}help | github.com/DDynamic/discord-stars`,
+          name: `${DISCORD_PREFIX}help | github.com/DDynamic/discord-stars`,
         },
       });
       console.log(`Logged in as ${client.user.tag}!`);
     });
 
     client.on("message", (msg) => {
-      if (msg.content.startsWith(process.env.DISCORD_PREFIX)) {
+      if (msg.content.startsWith(DISCORD_PREFIX)) {
         switch (
-          msg.content.split(process.env.DISCORD_PREFIX)[1].split(" ")[0]
+          msg.content.split(DISCORD_PREFIX)[1].split(" ")[0]
         ) {
           case "help":
             msg.channel.send(`
 Discord Stars, a simple Discord bot to reward your server members, created by @DDynamic. Licensed under the MIT License. \`\`\`
-${process.env.DISCORD_PREFIX}help - shows helpful information
-${process.env.DISCORD_PREFIX}leaderboard - lists members and a count of their TIFI
-${process.env.DISCORD_PREFIX}list <@Member> - lists a member's TIFI
-${process.env.DISCORD_PREFIX}count <@Member> - counts a member's TIFI
-${process.env.DISCORD_PREFIX}add <@Member> <message> - adds a TIFI to a member
-${process.env.DISCORD_PREFIX}delete <star_id> - deletes a TIFI, find the star_id via the list command
+${DISCORD_PREFIX}help - shows helpful information
+${DISCORD_PREFIX}leaderboard - lists members and a count of their TIFI
+${DISCORD_PREFIX}list <@Member> - lists a member's TIFI
+${DISCORD_PREFIX}count <@Member> - counts a member's TIFI
+${DISCORD_PREFIX}add <@Member> <message> - adds a TIFI to a member
+${DISCORD_PREFIX}delete <star_id> - deletes a TIFI, find the star_id via the list command
 \`\`\`
           `);
             break;
@@ -188,6 +196,6 @@ ${process.env.DISCORD_PREFIX}delete <star_id> - deletes a TIFI, find the star_id
       }
     });
 
-    client.login(process.env.DISCORD_TOKEN);
+    client.login(DISCORD_TOKEN);
   }
 );
