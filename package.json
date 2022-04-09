@@ -19,7 +19,7 @@
   "dependencies": {
     "discord.js": "^11.6.4",
     "dotenv": "^8.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "pg": "^8.7.1"
   }
 }
