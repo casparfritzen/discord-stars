@@ -2,7 +2,6 @@ require('dotenv').config()
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const moment = require('moment');
-
 const { Pool } = require('pg')
 
 const pool = new Pool({
